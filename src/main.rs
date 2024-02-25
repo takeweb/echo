@@ -1,26 +1,23 @@
-use clap::{App, Arg};
+use clap::Parser;
+
+/// Rust echo CLI
+#[derive(Parser, Debug)]
+#[command(version, about, long_about = None)]
+pub struct Args {
+    /// Input text
+    #[arg(value_name = "TEXT", required = true)]
+    text: Vec<String>,
+
+    /// Do not print newline
+    #[arg(short = 'n', long = "omit-newline", required = false)]
+    omit_newline: bool,
+}
 
 fn main() {
-    let matches = App::new("recho")
-        .version("0.1.0")
-        .author("Takeweb <takeweb@mac.com>")
-        .about("Rust echo")
-        .arg(
-            Arg::with_name("text")
-                .value_name("TEXT")
-                .help("Input text")
-                .required(true)
-                .min_values(1),
-        )
-        .arg(
-            Arg::with_name("omit_newline")
-                .short("n")
-                .help("Do not print newline")
-                .takes_value(false),
-        )
-        .get_matches();
-
-    let text = matches.values_of_lossy("text").unwrap();
-    let omit_newline = matches.is_present("omit_newline");
-    print!("{}{}", text.join(" "), if omit_newline { "" } else { "\n" });
+    let args = Args::parse();
+    print!(
+        "{}{}",
+        args.text.join(" "),
+        if args.omit_newline { "" } else { "\n" }
+    );
 }
