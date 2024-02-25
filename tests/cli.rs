@@ -1,5 +1,5 @@
 use assert_cmd::Command;
-use predicates::str;
+use predicates::prelude::*;
 use std::fs;
 
 type TestResult = Result<(), Box<dyn std::error::Error>>;
@@ -9,7 +9,7 @@ fn dies_no_args() -> TestResult {
     Command::cargo_bin("recho")?
         .assert()
         .failure()
-        .stderr(predicates::str::contains("Usage"));
+        .stderr(predicate::str::contains("Usage"));
     Ok(())
 }
 
